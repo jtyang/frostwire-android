@@ -20,6 +20,9 @@ package com.frostwire.android.gui.views;
 
 import java.util.List;
 
+import android.app.Activity;
+import android.app.Fragment;
+import android.app.NativeActivity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
@@ -32,7 +35,10 @@ import android.widget.LinearLayout;
 
 import com.frostwire.android.R;
 import com.frostwire.android.gui.adapters.PromotionsAdapter;
+import com.frostwire.android.gui.util.OfferUtils;
 import com.frostwire.frostclick.Slide;
+import com.ironsource.mobilcore.MobileCore;
+import com.ironsource.mobilcore.NativeAdsAdapter;
 
 /**
  * @author gubatron
@@ -66,7 +72,14 @@ public class PromotionsView extends LinearLayout {
     public void setSlides(List<Slide> slides) {
         if (gridview != null && slides != null) {
             this.slides = slides;
-            gridview.setAdapter(new PromotionsAdapter(gridview.getContext(), slides));
+            final PromotionsAdapter promotionsAdapter = new PromotionsAdapter(gridview.getContext(), slides);
+            if (OfferUtils.isMobileCoreEnabled()) {
+                NativeAdsAdapter adsAdapter = MobileCore.buildNativeAdsAdapter((Activity) gridview.getContext(), promotionsAdapter, R.layout.view_promotions_native_ads_item);
+                adsAdapter.setAdsPositions(1,3,5,7);
+                gridview.setAdapter(adsAdapter);
+            } else {
+                gridview.setAdapter(promotionsAdapter);
+            }
         }
     }
 

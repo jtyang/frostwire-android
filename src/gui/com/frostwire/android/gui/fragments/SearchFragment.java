@@ -186,6 +186,7 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
             }
         });
 
+
         searchProgress = findView(view, R.id.fragment_search_search_progress);
         searchProgress.setCancelOnClickListener(new OnClickListener() {
             @Override
